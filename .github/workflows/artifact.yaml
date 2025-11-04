@@ -18,10 +18,10 @@ jobs:
     needs: [upload-artifact]
     steps:
       - name: download artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/download-artifact@v4
         with:
           name: artifact-test
           path: './'
 
       - name: check
-        run: cat hello.txt
+        run: cat hell
