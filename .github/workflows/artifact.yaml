@@ -24,4 +24,4 @@ jobs:
           path: './'
 
       - name: check
-        run: cat hell
+        run: cat hello.txt
