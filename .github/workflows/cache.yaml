@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: myapp  # cd 반복 없이 myapp에서 실행
+        working-directory: myapp  # cd 없이 myapp에서 실행
 
     steps:
       - name: Checkout
@@ -19,9 +19,16 @@ jobs:
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'   # '22.12'보다 범용/안정 (LTS/보안패치 자동 추적)
+          node-version: '22.x'
 
-      # node_modules 대신 npm 캐시 디렉터리(~/.npm) 캐싱
+      # 🔹 락파일이 없으면 먼저 생성 (처음 1회 대비)
+      - name: Ensure lockfile
+        run: |
+          if [ ! -f package-lock.json ]; then
+            npm install --package-lock-only
+          fi
+
+      # 🔹 캐시: 락파일 기준으로 키 생성 (재현성 + 속도)
       - name: Cache npm cache
         uses: actions/cache@v3
         with:
@@ -30,21 +37,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-        
-      # 락파일 없으면 생성
-      - name: Ensure lockfile
-        run: |
-          if [ ! -f package-lock.json ]; then
-            npm install --package-lock-only
-          fi
-
-      # 락파일 있으면 ci, 없었으면 방금 만든 락으로 ci
       - name: Install dependencies
         run: npm ci
 
