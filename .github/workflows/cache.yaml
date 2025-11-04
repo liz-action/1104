@@ -3,42 +3,26 @@ name: cache
 on:
   push:
     paths:
-      - 'myapp/**'   # myapp 폴더 변경시에만 실행
+      - 'myapp/**'   # myapp 폴더 변경 시에만 실행
 
 jobs:
   cache:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: myapp  # cd 없이 myapp에서 실행
+        working-directory: myapp
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js 22
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22.x'
-
-      # 🔹 락파일이 없으면 먼저 생성 (처음 1회 대비)
-      - name: Ensure lockfile
-        run: |
-          if [ ! -f package-lock.json ]; then
-            npm install --package-lock-only
-          fi
-
-      # 🔹 캐시: 락파일 기준으로 키 생성 (재현성 + 속도)
-      - name: Cache npm cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('myapp/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'npm'                         # ✅ setup-node 자체 캐시 기능 사용
+          cache-dependency-path: 'myapp/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci || npm install             # ✅ 락파일 없을 때도 대응
 
       - name: Build
         run: npm run build
