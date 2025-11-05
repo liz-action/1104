@@ -5,9 +5,9 @@ on: push
 jobs:
   get-env:
     runs-on: ubuntu-latest
-    env: 
-      LEVEL: ${{ vars.LEVEL }}
-      KEY: ${{ secrets.KEY }}
+    # env: 
+    #   LEVEL: ${{ vars.LEVEL }}
+    #   KEY: ${{ secrets.KEY }}
     
     steps:
       - name: check env & secret update
