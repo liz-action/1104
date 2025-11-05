@@ -1,0 +1,49 @@
+name: if-and-output
+
+
+on: push
+
+jobs:
+  create-output:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.make-result.outputs.value }}
+
+    steps:
+      - name: make result
+        id: make-result
+        run: |
+          echo "value=ok">> $GITHUB_OUTPUT
+
+      - name: check output
+        run: |
+         echo "결과 : ${{ steps.make-result.outputs.value }}"
+
+  on-success:
+    needs: [create-output]
+    runs-on: ubuntu-latest
+    if: ${{ success() }}
+    steps:
+      - run: echo " 성공시 실행 .result =  ${{ needs.create-output.outputs.value }}"
+
+  on-failure:
+    needs: [create-output]
+    runs-on: ubuntu-latest
+    if: ${{ failure() }}
+    steps:
+      - run: echo " 실패시 실행 "
+
+
+  on-cancelled:
+    needs: [create-output]
+    runs-on: ubuntu-latest
+    if: ${{ cancelled() }}
+    steps:
+      - run: echo "취소시 실행"
+
+  always-run:
+    needs: [create-output]
+    runs-on: ubuntu-latest
+    if: ${{always()}}
+    steps:
+      - run: echo "항상 실행"
