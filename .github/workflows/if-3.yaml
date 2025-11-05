@@ -7,7 +7,9 @@ jobs:
   create-output:
     runs-on: ubuntu-latest
     outputs:
-      result: ${{ steps.make-result.outputs.value }}
+      result: |
+       ${{ steps.make-result.outputs.value }}
+       exit 1
 
     steps:
       - name: make result
