@@ -10,7 +10,7 @@ jobs:
       KEY: ${{ secrets.KEY }}
     
     steps:
-      - name: check env & secret
+      - name: check env & secret update
         run: |
           echo ${{ vars.LEVEL }}
           echo ${{ secrets.KEY }}
