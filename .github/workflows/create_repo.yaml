@@ -30,4 +30,4 @@ jobs:
           echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} gh auth login --with-token
       - name: create-repo
         run: |
-          gh rep create liz-action/${{ inputs.prefix }}-${{ inputs.name}} --publick --add-readme
+          gh repo create liz-action/${{ inputs.prefix }}-${{ inputs.name}} --public --add-readme
