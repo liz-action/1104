@@ -9,8 +9,8 @@ jobs:
     steps:
       - name: check env & secret update
         run: |
-          echo ${{ vars.level }}
-          echo ${{ secrets.key }}
+          echo ${{ vars.LEVEL }}
+          echo ${{ secrets.KEY }}
     # env: 
     #   LEVEL: ${{ vars.LEVEL }}
     #   KEY: ${{ secrets.KEY }}
