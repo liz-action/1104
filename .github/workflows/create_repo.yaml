@@ -21,6 +21,9 @@ on:
 jobs:
   create-repo-automation:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}   # PAT에 repo 권한(그리고 조직 생성 권한) 필요
+
     steps:
       - name: gh auth login
         run: |
