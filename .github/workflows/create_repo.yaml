@@ -1,0 +1,30 @@
+name: create-repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      prefix:
+        description: 'set repo prefixe'
+        required: true
+        default: 'service'
+        type: choice
+        options:
+          - example
+          - service
+
+      name:
+        description: 'set repo name'
+        required: true
+        default: 'github-actions'
+        type: string
+
+jobs:
+  create-repo-automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: gh auth login
+        run: |
+          echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} gh auth login --with-token
+      - name: create-repo
+        run: |
+          gh rep create liz-action/${{ inputs.prefix }}-${{ inputs.name}} --publick --add-readme
