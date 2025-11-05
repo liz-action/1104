@@ -7,15 +7,15 @@ jobs:
   create-output:
     runs-on: ubuntu-latest
     outputs:
-      result: |
-       ${{ steps.make-result.outputs.value }}
-       exit 1
+      result:        ${{ steps.make-result.outputs.value }}
 
     steps:
       - name: make result
         id: make-result
         run: |
           echo "value=ok">> $GITHUB_OUTPUT
+          exit 1
+
 
       - name: check output
         run: |
