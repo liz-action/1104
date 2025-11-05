@@ -5,15 +5,15 @@ on: push
 jobs:
   get-env:
     runs-on: ubuntu-latest
-    # env: 
-    #   LEVEL: ${{ vars.LEVEL }}
-    #   KEY: ${{ secrets.KEY }}
     
     steps:
       - name: check env & secret update
         run: |
-          echo ${{ vars.LEVEL }}
-          echo ${{ secrets.KEY }}
+          echo ${{ vars.level }}
+          echo ${{ secrets.key }}
+    # env: 
+    #   LEVEL: ${{ vars.LEVEL }}
+    #   KEY: ${{ secrets.KEY }}
 
   # get-env-dev:
   #   runs-on: ubuntu-latest
