@@ -11,15 +11,12 @@ jobs:
         run: |
           echo "LEVEL: ${{ vars.level }}"
           echo "KEY: ${{ secrets.key }}"
-    # env: 
-    #   LEVEL: ${{ vars.LEVEL }}
-    #   KEY: ${{ secrets.KEY }}
 
-  # get-env-dev:
-  #   runs-on: ubuntu-latest
-  #   environment: dev
-  #   steps:
-  #     - name: check env & secret
-  #       run: |
-  #         echo "LEVEL=$LEVEL"
-  #         echo "KEY=$KEY"
+  get-env-dev:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: check env & secret
+        run: |
+          echo "LEVEL: ${{ vars.level }}"
+          echo "KEY: ${{ secrets.key }}"
