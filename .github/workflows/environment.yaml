@@ -3,7 +3,7 @@ name: environment
 on: push
 
 jobs:
-  get-env-org:
+  get-env:
     runs-on: ubuntu-latest
     env: 
       LEVEL: ${{ vars.LEVEL }}
@@ -15,8 +15,9 @@ jobs:
           echo "LEVEL=$LEVEL"
           echo "KEY=$KEY"
 
-  get-env-repo:
+  get-env-dev:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: check env & secret
         run: |
