@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: check env & secret update
+      - name: check env & secret
         run: |
           echo ${{ vars.level }}
           echo ${{ secrets.key }}
