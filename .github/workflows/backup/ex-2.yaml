@@ -1,0 +1,11 @@
+name: ex2
+on: 
+  push: 
+    brunches:
+      - dev
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "dev brunches에서 실행"
