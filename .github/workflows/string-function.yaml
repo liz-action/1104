@@ -1,0 +1,10 @@
+name: string-function
+on: push
+
+jobs:
+  string-function:
+    runs-on: ubontu-latest
+    steps:
+      - name:  startswith git
+        if: startsWith('github action','git')
+        run: echo "git"
