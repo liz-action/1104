@@ -1,6 +1,9 @@
 name: if-and-output
 
-on: push
+on: 
+  push:
+  workflow_dispatch:
+    
 
 jobs:
   create-output:
@@ -17,7 +20,7 @@ jobs:
 
       - name: check output
         run: |
-          echo "결과 : ${{ steps.make-result.outputs.result }}"
+          echo "결과 : ${{ steps.make-result.outputs.value }}"
   
   on-success:
     needs: [create-output]
