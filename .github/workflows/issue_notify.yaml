@@ -26,7 +26,7 @@ jobs:
 
           for keyword in $keywords; do
 
-          if [["$title"=~ $keyword]]; then
+          if [["$title" =~ $keyword]]; then
             echo match: $keyword
             echo "level=$keyword" >> $GITHUB_OUTPUT
 
@@ -39,7 +39,7 @@ jobs:
 
   slack:
     needs: [get-keyword]
-    if: needs.get-keyword.outputs.level !='Undefined'
+    if: needs.get-keyword.outputs.level != 'Undefined'
     runs-on: ubuntu-latest
     environment: ${{ needs.get-keyword.outputs.level }}
     steps:
@@ -63,5 +63,5 @@ jobs:
                   ]
                 }
         env:
-          SLACK_WEBHOOK_URL: $${secrets.SLACK_WEBHOOK_URL}
+          SLACK_WEBHOOK_URL: $${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
