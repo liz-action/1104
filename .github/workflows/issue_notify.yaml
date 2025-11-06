@@ -11,57 +11,54 @@ jobs:
       level: ${{ steps.get-keyword.outputs.level }}
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: get keyword
         id: get-keyword
+        shell: bash
         run: |
-          echo level=Undefined >> $GITHUB_OUTPUT
+          echo "level=Undefined" >> "$GITHUB_OUTPUT"
 
           title="${{ github.event.issue.title }}"
-          echo "Issue Title : $title"
-          
-          keywords=$(cat keyword-list.txt)
+          echo "Issue Title: $title"
 
-          for keyword in $keywords; do
+          while IFS= read -r keyword; do
+            [[ -z "$keyword" || "$keyword" =~ ^# ]] && continue
+            if [[ "$title" =~ $keyword ]]; then
+              echo "match: $keyword"
+              echo "level=$keyword" >> "$GITHUB_OUTPUT"
+              break
+            fi
+          done < keyword-list.txt
 
-          if [["$title" =~ $keyword]]; then
-            echo match: $keyword
-            echo "level=$keyword" >> $GITHUB_OUTPUT
-
-          fi
-
-          done
       - name: get output
-        run: |
-          echo ${{ steps.get-keyword.outputs.level}}
+        run: echo "LEVEL=${{ steps.get-keyword.outputs.level }}"
 
   slack:
     needs: [get-keyword]
-    if: needs.get-keyword.outputs.level != 'Undefined'
+    if: ${{ needs.get-keyword.outputs.level != 'Undefined' }}
     runs-on: ubuntu-latest
-    environment: ${{ needs.get-keyword.outputs.level }}
+    environment: ${{ needs.get-keyword.outputs.level }}   # 환경 이름이 실제로 존재해야 함
     steps:
       - name: slack
         uses: slackapi/slack-github-action@v2.1.1
         with:
-              payload: |
-                {            
-                  "attachments":[
+          payload: |
+            {
+              "attachments": [
+                {
+                  "pretext": "issue alert message",
+                  "color": "28a745",
+                  "fields": [
                     {
-                      "pretext": "issue alert message",
-                      "color": "28a745",
-                      "fields": [
-                        {
-                          "title": "level:  ${{ needs.get-keyword.outputs.level }}",
-                          "short": true,
-                          "value": "issue url : ${{ github.event.issue.html_url }}"
-                        }
-                      ]
+                      "title": "level: ${{ needs.get-keyword.outputs.level }}",
+                      "short": true,
+                      "value": "issue url : ${{ github.event.issue.html_url }}"
                     }
                   ]
                 }
+              ]
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
