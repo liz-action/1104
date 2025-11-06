@@ -4,30 +4,57 @@ on:
   workflow_dispatch:
     inputs:
       prefix:
-        description: 'set repo prefixe'
+        description: "set repo prefixe"
         required: true
-        default: 'service'
+        default: "service"
         type: choice
         options:
           - example
           - service
 
       name:
-        description: 'set repo name'
+        description: "set repo name"
         required: true
-        default: 'github-actions'
+        default: "github-actions"
         type: string
 
 jobs:
   create-repo-automation:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}   # PAT에 repo 권한(그리고 조직 생성 권한) 필요
+      GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # PAT에 repo 권한(그리고 조직 생성 권한) 필요
 
     steps:
       - name: gh auth login
         run: |
           echo ${{ secrets.PERSONAL_ACCESS_TOKEN }} gh auth login --with-token
       - name: create-repo
+        id: create-repo
         run: |
           gh repo create liz-action/${{ inputs.prefix }}-${{ inputs.name}} --public --add-readme
+
+      - name: slack
+        if: always()
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          payload: |
+            {            
+              "attachments":[
+                {
+                  "pretext": "create repo result",
+                  "color": "28a745",
+                  "fields": [
+                    {
+                      "title": "create repo result ${{ steps.create-repo.outcome }}",
+                      "short": true,
+                      "value": "${{ inputs.prefix }}-${{ inputs.name}}"
+                    }
+                  ]
+                }
+              ]
+            }
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+        env:
+          SLACK_WEBHOOK_URL: $${secrets.SLACK_WEBHOOK_URL}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
