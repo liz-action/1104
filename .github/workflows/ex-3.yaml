@@ -1,0 +1,13 @@
+name: if3 starsWith
+
+on:   push
+
+jobs:
+  detect-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 기능 브랜치 감지
+        if: startsWith(github.ref,'refs/head/feat-')
+
+        run: echo "기능 브랜치 감지"
+      
