@@ -3,12 +3,34 @@ on: push
 
 jobs:
   string-function:
-    runs-on: ubontu-latest
+    runs-on: ubuntu-latest
     steps:
+      # ✅ startsWith: "github actions"이 "git"으로 시작하면 true
       - name: startswith git
-        if: startsWith('github action','git')
+        if: startsWith('github actions','git')
         run: echo "git"
 
+      # ❌ false → 실행 안됨
       - name: startswith test
-        if: startsWith('test action','test')
+        if: startsWith('github actions','test')
         run: echo "test"
+
+      # ✅ endsWith: "github actions"이 "ions"로 끝나면 true
+      - name: endswith ions
+        if: endsWith('github actions','ions')
+        run: echo "ions"
+
+      # ❌ false → 실행 안됨
+      - name: endswith test
+        if: endsWith('github actions','test')
+        run: echo "test"
+
+      # ✅ contains: "github actions"이 "act"를 포함하면 true
+      - name: contains act
+        if: contains('github actions','act')
+        run: echo "contains act"
+
+      # ❌ false → 실행 안됨
+      - name: contains git
+        if: contains('github, actions','git')
+        run: echo "contains git"
