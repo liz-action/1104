@@ -4,4 +4,4 @@ COPY myapp/package*.json ./
 RUN npm install
 COPY myapp/ ./
 EXPOSE 3000
-CMD ["npm","start"]
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "80"]
