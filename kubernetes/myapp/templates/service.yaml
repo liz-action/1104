@@ -4,7 +4,7 @@ metadata:
   name: my-app
 spec:
   selector:
-    app: react
+    app: my-app
   ports:
     - protocol: TCP
       port: 80
